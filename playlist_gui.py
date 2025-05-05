@@ -8,7 +8,9 @@ from song import Song
 from file_service import save_playlist, load_playlist
 
 class PlaylistApp(QWidget):
+    """A PyQt6 GUI for managing a playlist with options to add, remove, and reorder songs."""
     def __init__(self):
+        """Initialize the playlist app interface and load saved songs."""
         super().__init__()
         self.setWindowTitle("iPod Style Playlist Manager")
         self.setGeometry(400, 150, 350, 500)
@@ -102,6 +104,7 @@ class PlaylistApp(QWidget):
         self.refresh_screen()
 
     def button_style(self) -> str:
+        """Returns the CSS style string used for the app's buttons."""
         return """
             QPushButton {
                 background-color: #e0e0e0;
@@ -117,6 +120,7 @@ class PlaylistApp(QWidget):
         """
 
     def add_song(self):
+        """Adds a new song to the playlist and updates the display."""
         title = self.title_input.text().strip()
         artist = self.artist_input.text().strip()
         if title and artist:
@@ -129,6 +133,7 @@ class PlaylistApp(QWidget):
             QMessageBox.warning(self, "Missing Info", "Please enter both song name and artist.")
 
     def remove_song(self):
+        """Removes the selected song from the playlist."""
         index = self.screen.currentRow()
         if index >= 0:
             del self.songs[index]
@@ -136,6 +141,7 @@ class PlaylistApp(QWidget):
             save_playlist("playlist.csv", self.songs)
 
     def move_up(self):
+        """Moves the selected song one position up in the playlist."""
         i = self.screen.currentRow()
         if i > 0:
             self.songs[i - 1], self.songs[i] = self.songs[i], self.songs[i - 1]
@@ -144,6 +150,7 @@ class PlaylistApp(QWidget):
             save_playlist("playlist.csv", self.songs)
 
     def move_down(self):
+        """Moves the selected song one position down in the playlist."""
         i = self.screen.currentRow()
         if i < len(self.songs) - 1:
             self.songs[i + 1], self.songs[i] = self.songs[i], self.songs[i + 1]
@@ -152,6 +159,7 @@ class PlaylistApp(QWidget):
             save_playlist("playlist.csv", self.songs)
 
     def refresh_screen(self):
+        """Updates the playlist display with the current list of songs."""
         self.screen.clear()
         for song in self.songs:
             self.screen.addItem(str(song))
